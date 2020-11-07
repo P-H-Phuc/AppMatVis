@@ -1,16 +1,20 @@
 library(shiny)
 library(shinydashboard)
-shinyApp(
-  ui = dashboardPage(
+
+  ui = tagList(
+    includeCSS("www/theme/theme_custom.css"),
+    dashboardPage(
+    
+    # header
     dashboardHeader(
-      title = tags$a(tags$img(src='./www/logo.jpg', 50, 50), "title"), 
+      title = tags$div(tags$img(src='logo1.jpg',height = "55px",width="232px")), 
       titleWidth = 300,
       tags$li(class = "dropdown",
               tags$p(h4("Time: ", textOutput("current_time", container = span),
-                        style = "color: white; font-size: 20px")))
+                        style = "color: white; font-size: 18px")))
     ),
+    # sidebar
     dashboardSidebar(
-      width = 300,
       
       #' Sidebar content
       sidebarMenu(
@@ -19,8 +23,8 @@ shinyApp(
         #' Item 2
         menuItem(strong("Source code", style = "color: white"), tabName = "code", icon = icon("code"))
       )),
+    # body
     dashboardBody(
-      tags$head(source("./www/theme/css.R")),
       tabItems(
         #' Content tab 2
         tabItem(
@@ -52,7 +56,7 @@ shinyApp(
                   )
                 )
                 )
-    )),
+    ))),
   server = function(input, output) { 
     output$current_time = renderText({
       invalidateLater(as.integer(1000))
@@ -60,3 +64,4 @@ shinyApp(
     )
     }
 )
+

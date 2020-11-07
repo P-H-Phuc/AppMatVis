@@ -1,7 +1,8 @@
 #' [--RUN APP--]
 #'
-#' Run ui_app.R
-#' Run server_app.R
-#' 
+#' Run ui.R
+source("./ui.R")
+#' Run server.R
+source("./server.R")
 shiny::shinyApp(ui, server)
 

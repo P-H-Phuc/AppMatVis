@@ -5,7 +5,7 @@
 #' @example run `create_density(1000, "normal", c(0, 2), 4, 4)`
 #'
 #'
-create_density <- function(n, distribution, params, x_from, x_to) {
+create_density <- function(n, distribution, param1, param2, x_from, x_to) {
   
   #' Function random generation for distribution
   #' `n` = number of observation
@@ -29,11 +29,11 @@ create_density <- function(n, distribution, params, x_from, x_to) {
     if(length(params) < 2) {
       stop("Beta prior requires two shape parameters!")
     } else {
-      if(params[1] < 0 | params[2] < 0) {
+      if(param1 < 0 | param2 < 0) {
         stop("Beta prior shape parameters must be greater than zero!")
       }
-      a = params[1]
-      b = params[2]
+      a = param1
+      b = param2
     }
     data = stats::dbeta(pi, a, b)
     quantiles = qbeta(p = probability,
@@ -44,10 +44,10 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Exponential distribution
   else if(distribution == "exp") {
-    if(params[1] <= 0) {
+    if(param1 <= 0) {
       stop("Parameter for exponential distribution must be greater than zero!")
     } else {
-      rate = params[1]
+      rate = param1
       data = stats::dexp(pi, rate)
       quantiles = qexp(probability,
                        rate)
@@ -58,11 +58,11 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Normal distribution
   else if(distribution == "normal") {
-    if(length(params) < 2) {
+    if(is.null(param1) | is.null(param2)) {
       stop("Normal distribution requires a mean and std.deviation!")
     } else {
-      mean = params[1]
-      sd = params[2]
+      mean = param1
+      sd = param2
       if(sd <= 0) {
         stop("Std. deviation for normal distribution must be greater than zero!")
       }
@@ -76,11 +76,11 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Uniform distribution
   else if(distribution == "uniform") {
-    if (length(params) < 2) {
+    if (is.null(param1) | is.null(param2)) {
       stop("Uniform distribution requires a minimum and a maximum!")
     } else {
-      min = params[1]
-      max = params[2]
+      min = param1
+      max = param2
       if (max <= min) {
         stop("Maximum must be greater than minimum!")
       }
@@ -94,14 +94,14 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Gamma distribution
   else if(distribution == "gamma") {
-    if(length(params) < 2) {
+    if(is.null(param1) | is.null(param2)) {
       stop("Gamma distribution requires two parameters!")
     } else {
-    if(params[1] <= 0 | params[2] <= 0) {
+    if(param1 <= 0 | param2 <= 0) {
       stop("Gamma distribution requires shape and scale parameters must be positive!")
     } else {
-      shape = params[1]
-      rate = params[2]
+      shape = param1
+      rate = param2
       data = dgamma(pi, shape, rate)
       quantiles = qgamma(p = probability,
                          shape, rate)
@@ -113,14 +113,14 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Binomial distribution
   else if(distribution == "binomial") {
-    if(length(params) < 2) {
+    if(is.null(param1) | is.null(param2)) {
       stop("Binomial requires number of trials and probability of success on each trail!")
     } else {
-      if(params[2] > 1| params[2] < 0) {
+      if(param2 > 1 | param2 < 0) {
         stop("Probability of success has length from zero to one!")
       } 
-      size = params[1]
-      prob = params[2]
+      size = param1
+      prob = param2
       data = dbinom(n, size, prob)
       quantiles = qbinom(p = probability,
                          size, prob)
@@ -131,10 +131,10 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Poisson distribution
   else if(distribution == "poisson") {
-    if(params[1] < 0) {
+    if(param1 < 0) {
       stop("Poisson distribution requires lamda non-negative!")
     } else {
-      lambda = params[1]
+      lambda = param1
       data = dpois(pi, lambda)
       quantiles = qpois(p = probability,
             lambda)
@@ -145,10 +145,10 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Chi square distribbution
   else if(distribution == "chi_sq") {
-    if(params[1] <= 0) {
+    if(param1 <= 0) {
       stop("Chi square distribution requires degrees of freedom non-negative")
     } else {
-      df = params[1]
+      df = param1
       data = dchisq(pi, df)
       quantiles = qchisq(p = probability,
                          df)
@@ -159,13 +159,13 @@ create_density <- function(n, distribution, params, x_from, x_to) {
   }
   #' Student distribution
   else if(distribution == "student_t") {
-    if(length(params) < 3) {
+    if(is.null(param1)) {
       stop("Student distribution requires value of df, mu, sigma")
     } else {
-      if(params[1] <= 0 | params[1] == 2) {
+      if(param1 <= 0 | param1 == 2) {
         stop("Degress of freedom must be greater than zero and must be difference 2!")
         } else{
-          df = params[1]
+          df = param1
           mu = 0
           sigma = df / (df - 2)
           data = brms::dstudent_t(pi, df, mu, sigma)

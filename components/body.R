@@ -6,13 +6,19 @@
 #' [Dashboard Body]
 #' ----------------------------------------------------------------------
 
-dashboard_body <- dashboardBody(
+#' Run content tab
+  #' Tab Explore distribution
+  source('./components/content_tab/explore_distribution_tab.R')
+  #' Tab Source code
+  source('./components/content_tab/information_tab.R')
   
+#' Body
+body <- dashboardBody(
   #' Tab Item Content
   tabItems(
-    #' Content tab source code
-    source_code_tab,
     #' Content explore distribution
-    explore_distribution_tab
+    explore_distribution_tab,
+    #' Source code tab
+    source_code_tab
   )
 )

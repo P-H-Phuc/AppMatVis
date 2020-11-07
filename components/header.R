@@ -6,19 +6,18 @@
 #  [Dashboard Header] ====
 #' ------------------------------------------------------------------------
 
-dashboard_header <-  dashboardHeader(
-  #' theme for app `run css.R`
-  tags$head(source('~/projectR/ApplicationForBayesStat/www/theme/css.R')), 
+header <-  dashboardHeader(
   #' title name
-  title = "Introduction Bayesian Statistic",
+  title = "Mathematical Visualization",
   
   #' width title
-  titleWidth = "30%",
+  titleWidth = 350,
   
   #' add time current
   tags$li(class = "dropdown",
-          tags$p(h4("Time: ", textOutput("current_time", container = span),
-                    style = "color: white; font-size: 22px")))
+          tags$p("Time now: ", textOutput("current_time", container = span),
+                    style = "color: white; font-size: 18px;
+                 padding-top: 10px; padding-right: 10px"))
   )
 
 
