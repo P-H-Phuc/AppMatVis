@@ -1,2 +1,4 @@
-# ApplicationForBayesStat
-Create plot for distribution
+# App Mat-Vis
+
+[x] Explore distribution by visualization
+[x] Bayesian Statistics
