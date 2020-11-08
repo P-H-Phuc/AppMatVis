@@ -33,4 +33,16 @@
   /* toggle button when hovered  */
   .skin-blue .main-header .navbar .sidebar-toggle:hover{
   background-color: #3f7e8b;
-  }        
+  }     
+  /* box */
+  .box.box-solid.box-primary>.box-header {
+  color:#fff;
+  background:#025a6c
+                    }
+
+  .box.box-solid.box-primary {
+  border-bottom-color:#025a6c;
+  border-left-color:#025a6c;
+  border-right-color:#025a6c;
+  border-top-color:#025a6c;
+  }

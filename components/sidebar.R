@@ -11,8 +11,8 @@ sidebar <- dashboardSidebar(
   width = 300,
   # add logo
   tags$li(class = "pull-left-image",
-          tags$p(tags$img(src = "logo.png", alt = "logo", width = 280, height = "auto"),
-                 style = "padding-right: 10px; padding-left: 10px")),
+          tags$p(tags$img(src = "logo_matvis.png", alt = "logo", width = 280, height = "auto"),
+                 style = "padding: 10px")),
   #' Sidebar content
   sidebarMenu(
     #' Tab 1

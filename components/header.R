@@ -17,7 +17,7 @@ header <-  dashboardHeader(
   tags$li(class = "dropdown",
           tags$p("Time now: ", textOutput("current_time", container = span),
                     style = "color: white; font-size: 18px;
-                 padding-top: 10px; padding-right: 10px"))
+                 padding-top: 10px; padding-right: 15px"))
   )
 
 

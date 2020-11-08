@@ -2,7 +2,7 @@
 #'
 #' @author `PhanHongPhuc`
 #' @description Create pdf and calculation necessary value of distribution
-#' @example run `create_density(1000, "normal", c(0, 2), 4, 4)`
+#' @example run `create_density(1000, "normal", 0, 2, -4, 4)`
 #'
 #'
 create_density <- function(n, distribution, param1, param2, x_from, x_to) {
@@ -13,7 +13,6 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
   #' "uniform", "poisson", "chi_sq", "student_t", "exp"
   #' `params`  parameters of distribution, example: beta(a; b); exp(rate) normal(mean, sd) uniform(min, max),...
   #' `pi` value scale x axis
-  
   distribution <- stringr::str_to_lower(distribution)
   pi <- seq(x_from, x_to, length.out = n)
   #' Stop if not
@@ -22,15 +21,15 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
                              "poisson", "chi_sq", "student_t", "exp")),
             (x_from < x_to)
   )
-  #' Probability for credible interval
-  probability = c(0.01,0.025, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99)
+  #' Probability
+  probability <-  c(0.05, 0.25, 0.5, 0.75, 0.95)
   #' Beta distribution
   if(distribution == "beta") {
     if(length(params) < 2) {
-      stop("Beta prior requires two shape parameters!")
+      stop("Beta distribution requires two shape parameters!")
     } else {
       if(param1 < 0 | param2 < 0) {
-        stop("Beta prior shape parameters must be greater than zero!")
+        stop("Beta distribution requires parameters must be greater than zero!")
       }
       a = param1
       b = param2
@@ -184,7 +183,8 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
   results = list(name_distribution = distribution,
                  param_x = pi, density = data, 
                  mean = mean, var = var, sd = sqrt(var),
-                 quantiles = quantiles)
+                 meadian = quantiles[3], quantiles = quantiles
+                 )
   invisible(results)
 }
 

@@ -21,7 +21,7 @@ base::options(stringsAsFactors = FALSE) #' Manage String to Factor of R in data.
 require_packages <- function() {
   #' Package require
   pkgs <- c(
-  "tidyverse", "Bolstad", "shiny", "gridExtra",
+  "tidyverse", "Bolstad", "shiny", "gridExtra", "shinydashboard", "shinyWidgets",
   "kableExtra", "glue", "brms", "tibble"
   )
   #' return 
