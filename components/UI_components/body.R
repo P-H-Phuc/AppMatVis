@@ -8,9 +8,9 @@
 
 #' Run content tab
   #' Tab Explore distribution
-  source('./components/content_tab/explore_distribution_tab.R')
+  source('./components/UI_components/content_tab/explore_distribution_tab.R')
   #' Tab Source code
-  source('./components/content_tab/information_tab.R')
+  source('./components/UI_components/content_tab/information_tab.R')
   
 #' Body
 body <- dashboardBody(

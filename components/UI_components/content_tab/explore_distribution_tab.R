@@ -12,8 +12,8 @@ explore_distribution_tab <- tabItem(
                              font-weight: bold; color: white;"),
                #' Select distribution
                selectInput(inputId = "distribution", label = "Choose distribution:",
-                           choices = list("Beta", "Binomial", "Chi - square" = "chi-sq", 
-                                          "Exponential" = "exp", "Gamma", "Normal",
+                           choices = list("Beta", "Binomial", "Chi - square", 
+                                          "Exponential", "Gamma", "Normal",
                                           "Poisson", "Student-t", "Uniform"),
                            selected = "Normal", width = "95%"),
                #' Number observation
@@ -28,9 +28,9 @@ explore_distribution_tab <- tabItem(
                             value = 1, width = "95%"), 
                #' Range value
                numericInput(inputId = "x_from", label = "Range value from:",
-                            value = -2, width = "95%"),
+                            value = -4, width = "95%"),
                numericInput(inputId = "x_to", label = "Range value to:",
-                            value = 2, width = "95%"),
+                            value = 4, width = "95%"),
                actionBttn(inputId = "refresh", label = strong("Refresh"), 
                           color = "danger", style = "fill", size = "sm"),
                actionBttn(inputId = "action", label = strong("Go"), 
@@ -47,7 +47,8 @@ explore_distribution_tab <- tabItem(
                  sliderInput(inputId = "prob", label = "Feedback Percentiles", min = 0, max = 1, 
                              value =c(0.25, 0.75), step = 0.005, width = "30%", ticks = FALSE))),
            box(solidHeader = TRUE, status = "primary", width = "100%", height = 550,
-               title = div("Visualize distribution", style = "font-family: Bell MT; font-size: 22px;
+               title = div(textOutput(outputId = "title", span), 
+               style = "font-family: Bell MT; font-size: 22px;
                              font-weight: bold; color: white;"),
                plotOutput(outputId = "plot", width = "100%", height = "450px"))
     )

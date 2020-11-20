@@ -20,12 +20,15 @@ server <- function(input, output) {
     invalidateLater(millis = 1000)
     format(Sys.time())
   })
-  output$plot <- renderPlot({
-    input$action
-    source("./custom_functions/create_density.R")
-    vis <- create_density(n = input$n, distribution = input$distribution, param1 = input$param_1,
-                          param2 = input$param_2, x_from = input$x_from, x_to = input$x_to)
-    plot(x = vis$param_x, y = vis$density, "l")
+  #' Title of distribution
+  output$title <- renderText({
+    glue::glue("The graphic of {name} distribution", name = input$distribution)
   })
-  
+  #' PlotOutput
+  output$plot <- renderPlot({
+  source("./components/Server_components/plot_output.R")
+  plot_output(n = input$n, distribution = input$distribution, 
+              param1 = input$param_1, param2 = input$param_2,
+              x_from = input$x_from, x_to = input$x_to, prob = input$prob)
+  })
 }

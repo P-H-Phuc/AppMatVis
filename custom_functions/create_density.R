@@ -18,14 +18,14 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
   #' Stop if not
   stopifnot(schoolmath::is.positive(n), length(n) == 1, is.numeric(n),
             (distribution %in% c("normal", "beta", "gamma", "binomial", "uniform", 
-                             "poisson", "chi_sq", "student_t", "exp")),
+                             "poisson", "chi - square", "student_t", "exponential")),
             (x_from < x_to)
   )
   #' Probability
   probability <-  c(0.05, 0.25, 0.5, 0.75, 0.95)
   #' Beta distribution
   if(distribution == "beta") {
-    if(length(params) < 2) {
+    if(is.null(param1) | is.null(param2)) {
       stop("Beta distribution requires two shape parameters!")
     } else {
       if(param1 < 0 | param2 < 0) {
@@ -42,7 +42,7 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
     mode = (a - 1) / (a + b + 2)
   }
   #' Exponential distribution
-  else if(distribution == "exp") {
+  else if(distribution == "exponential") {
     if(param1 <= 0) {
       stop("Parameter for exponential distribution must be greater than zero!")
     } else {
@@ -143,7 +143,7 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
     }
   }
   #' Chi square distribbution
-  else if(distribution == "chi_sq") {
+  else if(distribution == "chi - square") {
     if(param1 <= 0) {
       stop("Chi square distribution requires degrees of freedom non-negative")
     } else {
@@ -183,7 +183,7 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
   results = list(name_distribution = distribution,
                  param_x = pi, density = data, 
                  mean = mean, var = var, sd = sqrt(var),
-                 meadian = quantiles[3], quantiles = quantiles
+                 median = quantiles[3],mode = mode, quantiles = quantiles
                  )
   invisible(results)
 }

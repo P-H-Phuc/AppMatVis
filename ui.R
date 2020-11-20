@@ -1,11 +1,11 @@
 #' [--USER INTERFACE--]
 #'
 #' Run `header.R`
-source("./components/header.R")
+source("./components/UI_components/header.R")
 #' Run `sidebar.R`
-source("./components/sidebar.R")
+source("./components/UI_components/sidebar.R")
 #' Run `dashboard_body.R`
-source("./components/body.R")
+source("./components/UI_components/body.R")
 #' 
 #' UI has three parts: a header, a sidebar, and a body.
 
