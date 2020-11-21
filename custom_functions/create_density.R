@@ -5,19 +5,18 @@
 #' @example run `create_density(1000, "normal", 0, 2, -4, 4)`
 #'
 #'
-create_density <- function(n, distribution, param1, param2, x_from, x_to) {
+create_density <- function(n = 1000, distribution, param1, param2, x_from, x_to) {
   
   #' Function random generation for distribution
   #' `n` = number of observation
   #' `distribution` is distribution, may be one of "normal", "beta", "gamma", "binomial", 
   #' "uniform", "poisson", "chi_sq", "student_t", "exp"
-  #' `params`  parameters of distribution, example: beta(a; b); exp(rate) normal(mean, sd) uniform(min, max),...
+  #' `params`  parameters of distribution, example: beta(a; b); exp(rate) normal(mean, sd),...
   #' `pi` value scale x axis
   distribution <- stringr::str_to_lower(distribution)
-  pi <- seq(x_from, x_to, length.out = n)
   #' Stop if not
   stopifnot(schoolmath::is.positive(n), length(n) == 1, is.numeric(n),
-            (distribution %in% c("normal", "beta", "gamma", "binomial", "uniform", 
+            (distribution %in% c("normal", "beta", "gamma", 
                              "poisson", "chi - square", "student_t", "exponential")),
             (x_from < x_to)
   )
@@ -34,9 +33,8 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
       a = param1
       b = param2
     }
-    data = stats::dbeta(pi, a, b)
-    quantiles = qbeta(p = probability,
-                     a, b)
+    data = stats::dbeta(seq(0, 1, length.out = n), a, b)
+    quantiles = qbeta(p = probability, a, b)
     mean = a / (a+b)
     var = (a*b) / ((a + b)^2 * (a + b + 1))
     mode = (a - 1) / (a + b + 2)
@@ -47,9 +45,8 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
       stop("Parameter for exponential distribution must be greater than zero!")
     } else {
       rate = param1
-      data = stats::dexp(pi, rate)
-      quantiles = qexp(probability,
-                       rate)
+      data = stats::dexp(seq(0, x_to, length.out = n), rate)
+      quantiles = qexp(probability, rate)
       mean = 1 / rate
       var = 1 / rate^2
       mode = 0
@@ -65,31 +62,13 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
       if(sd <= 0) {
         stop("Std. deviation for normal distribution must be greater than zero!")
       }
-      data = stats::dnorm(pi, mean, sd)
+      data = stats::dnorm(seq(x_from, x_to, length.out = n), mean, sd)
       quantiles = qnorm(p = probability,
                         mean, sd)
       mean = mean
       var = sd^2
       mode = mean
     }
-  }
-  #' Uniform distribution
-  else if(distribution == "uniform") {
-    if (is.null(param1) | is.null(param2)) {
-      stop("Uniform distribution requires a minimum and a maximum!")
-    } else {
-      min = param1
-      max = param2
-      if (max <= min) {
-        stop("Maximum must be greater than minimum!")
-      }
-      data = dunif(pi, min, max)
-      quantiles = qunif(p = probability,
-                        min, max)
-      mean = (max + min) / 2
-      var = (max - min)^2 / 12
-      mode = max(data)
-  }
   }
   #' Gamma distribution
   else if(distribution == "gamma") {
@@ -101,7 +80,7 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
     } else {
       shape = param1
       rate = param2
-      data = dgamma(pi, shape, rate)
+      data = dgamma(seq(0, x_to, length.out = n), shape, rate)
       quantiles = qgamma(p = probability,
                          shape, rate)
       mean = shape / rate
@@ -110,31 +89,13 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
     }
     }
   }
-  #' Binomial distribution
-  else if(distribution == "binomial") {
-    if(is.null(param1) | is.null(param2)) {
-      stop("Binomial requires number of trials and probability of success on each trail!")
-    } else {
-      if(param2 > 1 | param2 < 0) {
-        stop("Probability of success has length from zero to one!")
-      } 
-      size = param1
-      prob = param2
-      data = dbinom(n, size, prob)
-      quantiles = qbinom(p = probability,
-                         size, prob)
-      mean = size * prob
-      var = size * prob * (1 - prob)
-      mode = max(data, na.rm = TRUE)
-    }
-  }
   #' Poisson distribution
   else if(distribution == "poisson") {
     if(param1 < 0) {
       stop("Poisson distribution requires lamda non-negative!")
     } else {
       lambda = param1
-      data = dpois(pi, lambda)
+      data = dpois(seq(0, x_to, length.out = n), lambda)
       quantiles = qpois(p = probability,
             lambda)
       mean = lambda
@@ -148,7 +109,7 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
       stop("Chi square distribution requires degrees of freedom non-negative")
     } else {
       df = param1
-      data = dchisq(pi, df)
+      data = dchisq(seq(0, x_to, length.out = n), df)
       quantiles = qchisq(p = probability,
                          df)
       mean = df
@@ -167,7 +128,7 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
           df = param1
           mu = 0
           sigma = df / (df - 2)
-          data = brms::dstudent_t(pi, df, mu, sigma)
+          data = brms::dstudent_t(seq(x_from, x_to, length.out = n), df, mu, sigma)
           quantiles = brms::qstudent_t(p = probabilty,
                                        df, mu, sigma)
           mean = mu
@@ -181,11 +142,27 @@ create_density <- function(n, distribution, param1, param2, x_from, x_to) {
   names(quantiles) = paste0(probability*100, "%")
   #' Results
   results = list(name_distribution = distribution,
-                 param_x = pi, density = data, 
-                 mean = mean, var = var, sd = sqrt(var),
-                 median = quantiles[3],mode = mode, quantiles = quantiles
+                 param_x = {if(distribution %in% c( 'normal', "student_t")) {
+                   seq(x_from, x_to, length.out = n)
+                 } else {
+                   if(distribution == "beta") seq(0, 1, length.out = n)
+                   else {
+                     seq(0, x_to, length.out = n)
+                   }}},
+                 density = data, mean = mean, var = var, sd = sqrt(var),
+                 median = quantiles[3], mode = mode, quantiles = quantiles
                  )
   invisible(results)
 }
+
+
+
+
+
+
+
+
+
+
 
 

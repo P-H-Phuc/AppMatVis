@@ -16,16 +16,10 @@ quantile_fun <- function(distribution, prob, param_1, param_2) {
   } else {
     if(stringr::str_to_lower(distribution) == "normal") {
       quantile = qnorm(prob, param_1, param_2)
-    } else {
-      if(stringr::str_to_lower(distribution) == "uniform") {
-        quantile = qunif(prob, param_1, param_2)
-      } else{
+      } else {
         if(stringr::str_to_lower(distribution) == "gamma") {
           quantile = qgamma(prob, param_1, param_2)
         } else {
-          if(stringr::str_to_lower(distribution) == "binomial") {
-            quantile = qbinom(prob, param_1, param_2)
-          } else {
             if(stringr::str_to_lower(distribution) == "poisson") {
               quantile = qpois(prob, param_1)
             } else {
@@ -41,7 +35,5 @@ quantile_fun <- function(distribution, prob, param_1, param_2) {
         }
       }
     }
-  }
-  }
   return(quantile)
 }
