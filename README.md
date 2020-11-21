@@ -2,4 +2,4 @@
 
  - [x] Explore distribution by visualization
 
- - [x] Bayesian Statistics
+ - [x] Information for computer and author
